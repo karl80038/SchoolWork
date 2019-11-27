@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ShopDatabaseKald.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,22 +9,29 @@ namespace ShopDatabaseKald.Models
 {
    public class Customer
     {
-      public  string FirstName { get; set; }
+        public string PersonaId { get; set; }
+        public  string FirstName { get; set; }
       public  string LastName { get; set; }
         [Key]
-      public  int PID { get; set; } 
+      public  Guid PID { get; set; } 
+
         int VisitCount { get; set; }
 
         DateTime CustomerSince { get; set; }
         public  virtual ICollection<ShoppingCart> Purchases { get; set; }
-        public virtual ICollection<Food> Items { get; set; }
 
-        public Customer(string firstName, string lastName, int pID)
+        public Customer()
         {
+            PID = Guid.NewGuid();
+            Purchases = new List<ShoppingCart>();
+        }
 
+        public Customer(string firstName, string lastName, string pID)
+        {
+            PID = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
-            PID = pID;
+            PersonaId = pID;
             Purchases = new List<ShoppingCart>();
             CustomerSince = DateTime.Now.Date;
 

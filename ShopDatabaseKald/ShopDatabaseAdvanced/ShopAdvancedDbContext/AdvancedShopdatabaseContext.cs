@@ -1,11 +1,12 @@
-﻿using ShopDatabaseKald.Models;
+﻿
+using ShopDatabaseKald.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 
-namespace ShopDatabaseAdvanced.ShopAdvancedDbContext
+namespace ShopDatabaseAdvanced/*ShopAdvancedDbContext*/
 {
     class AdvancedShopdatabaseContext : DbContext
     {

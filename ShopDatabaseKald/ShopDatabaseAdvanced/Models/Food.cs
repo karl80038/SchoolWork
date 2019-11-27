@@ -26,5 +26,11 @@ namespace ShopDatabaseKald.Models
             Name = name;
             Price = price;
         }
+
+        public override string ToString()
+        {
+            return $"Item: {Name}, Price: {Price}";
+        }
+
     }
 }

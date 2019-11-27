@@ -1,4 +1,5 @@
-﻿using ShopDatabaseAdvanced.ShopAdvancedDbContext;
+﻿
+using ShopDatabaseAdvanced;
 using ShopDatabaseKald.Models;
 using System;
 using System.Collections.Generic;
@@ -23,23 +24,23 @@ namespace ShopDatabaseAdvanced
                 //db.Foods.AddRange(groceries);
 
                 //ConsoleKey cKey;
-
+                
                 Console.WriteLine("Please enter your first name: ");
                 string fName = Console.ReadLine();
                 Console.WriteLine("Please enter your last name: ");
                 string lName = Console.ReadLine();
                 Console.WriteLine("Please enter your personal identification number (usually it's your social security number or personal code...");
-                string idToConvert = Console.ReadLine();
-                int pid;
-               bool Success = int.TryParse(idToConvert, out pid);
+                string ident = Console.ReadLine();
                 ShoppingCart newCart = new ShoppingCart();
-                if (fName != "" & lName != "" & Success)
+
+                if (fName != "" & lName != "" & ident != "")
                 {
-                Customer searchResult = db.Customers.FirstOrDefault(x => x.FirstName == fName & x.LastName == lName);
-                if (searchResult == null)
-                {
-                    db.Customers.Add(searchResult);
-                }
+                    Customer searchResult = db.Customers.FirstOrDefault(x => x.FirstName == fName & x.LastName == lName);
+                
+                    if (searchResult == null)
+                    {
+                        db.Customers.Add(searchResult = new Customer(fName, lName, ident));
+                    }
                 db.SaveChanges();
                 searchResult.Purchases.Add(newCart);
                 }
@@ -173,6 +174,34 @@ namespace ShopDatabaseAdvanced
                 //{
                 //    newCart.Items.Add(food);p
                 //}
+                
+                Console.WriteLine("Would you like to view the purchases you've made?");
+                ConsoleKey ckey = Console.ReadKey().Key;
+                if (ckey == ConsoleKey.Y)
+                {
+                    
+                    var carts = db.Customers.Include("Purchases");
+                    var customercarts = carts.Where(x => x.FirstName == fName & x.LastName == lName & x.PersonaId == ident);
+                    foreach (var cart in customercarts)
+                    {
+                            
+                          Console.WriteLine($"Shopping cart created: ");
+                            foreach (var purchase in cart.Purchases)
+                                {
+                            Console.WriteLine($"Purchase date:{purchase.DateCreated}");
+
+                            foreach (var listitem in purchase.Items) 
+                                {
+                                Console.WriteLine(($"Item: {listitem.Name}, Price:{listitem.Price}\n"));
+                                }
+
+                                }
+                         
+                            
+                    }
+                }
+                Console.WriteLine($"Thank you for choosing us, {fName}!");
+                Console.WriteLine("You may press any key on your keyboard to close the window.");
                 Console.ReadKey();
             }
         }
@@ -184,7 +213,7 @@ namespace ShopDatabaseAdvanced
                 if (chosenFood != null)
                 {
                     newCart.AddToCart(chosenFood);
-
+                db.SaveChanges();
                 }
                 else
                 {
