@@ -10,7 +10,7 @@ namespace ShopMVC___Kald.Models
         public Guid Id { get; set; }
         public Double Sum { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; private set; }
 
         public virtual ICollection<Food> Items { get; set; }
 
@@ -21,5 +21,12 @@ namespace ShopMVC___Kald.Models
             DateCreated = DateTime.Now;
             Items = new List<Food>();
         }
+
+        public void AddToCart(Food food)
+        {
+            Items.Add(food);
+            Sum += food.Price;
+        }
+
     }
 }
